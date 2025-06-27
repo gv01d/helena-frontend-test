@@ -72,4 +72,13 @@ class CompanyProvider extends ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<void> updateCompany(Company company) async {
+    try {
+      await _apiService.updateCompany(company);
+      await fetchCompanies(); // Recarrega a lista
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

@@ -8,11 +8,17 @@ import '../models/company.dart';
 class ApiService {
   final String _baseUrl = 'https://api.helena.run/test';
 
+  final Map<String, String> _headers = {
+    'Content-Type': 'application/json; charset=UTF-8',
+  };
+
+  // _________________________________________________________
   // Metodo para buscar todas as empresas
+
+  /// Fetches a list of companies from the API.
   Future<List<Company>> fetchCompanies() async {
     try {
       final response = await http.get(Uri.parse('$_baseUrl/api/company'));
-      print("DEBUG : response gotten: ${response.body}");
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -25,6 +31,10 @@ class ApiService {
     }
   }
 
+  // _________________________________________________________
+  // Metodo para adicionar uma empresa
+
+  /// Adds a new company to the API.
   Future<void> addCompany(Company company) async {
     try {
       final response = await http.post(
@@ -41,6 +51,34 @@ class ApiService {
     }
   }
 
+  // _________________________________________________________
+  // Metodo para atualizar uma empresa
+
+  /// Updates an existing company in the API.
+  Future<void> updateCompany(Company company) async {
+    try {
+      print(company.avatarUrl);
+      
+      final response = await http.put(
+        Uri.parse('$_baseUrl/api/company/${company.id}'),
+        headers: _headers,
+        body: json.encode(company.toJson())
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw Exception('Falha ao atualizar empresa. Código: ${response.statusCode}');
+      }
+    } on SocketException { // Falha de conexão
+      throw Exception('Falha de conexão. Verifique sua rede.');
+    } catch (e) { // Outro erro
+      throw Exception('Ocorreu um erro ao atualizar empresa: $e');
+    }
+  }
+
+  // _________________________________________________________
+  // metodo para "deletar" uma empresa (desativar)
+
+  /// Deletes (deactivates) a company by its ID in the API.
   Future<void> deleteCompany(int id) async {
     try {
       final response = await http.delete(

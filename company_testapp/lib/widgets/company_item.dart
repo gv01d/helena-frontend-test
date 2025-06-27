@@ -8,10 +8,12 @@ class CompanyItem extends StatelessWidget{
   // company data
   final Company company;
   final VoidCallback onDelete;
+  final VoidCallback onTap;
 
   const CompanyItem({
     super.key,
     required this.company,
+    required this.onTap,
     required this.onDelete,
   });
 
@@ -51,6 +53,7 @@ class CompanyItem extends StatelessWidget{
       margin: const EdgeInsets.symmetric(vertical: 6),
       elevation: 2,
       child: ListTile(
+        onTap: onTap,
 
         // ________________________________________________________________________
         // Avatar da Empresa

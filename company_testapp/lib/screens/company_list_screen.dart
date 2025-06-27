@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../providers/company_provider.dart';
 import '../widgets/company_item.dart';
 import '../widgets/error.dart';
+import '../widgets/edit_dialog.dart';
 
 class CompanyListScreen extends StatefulWidget {
   const CompanyListScreen({super.key});
@@ -85,6 +86,38 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
               itemBuilder:
                 (ctx, i) => CompanyItem(
                   company: provider.companies[i],
+                  onTap: () => showCustomEditDialog(
+                    context,
+                    provider.companies[i],
+                    (updatedCompany) async {
+                      try {
+                        if (updatedCompany.id != null) {
+                          // Atualiza a empresa existente
+                          await provider.updateCompany(updatedCompany);
+                        } else {
+                          // erro
+                          throw Exception('ID da empresa não pode ser nulo.');
+                        }
+
+                        // Exibe mensagem de sucesso
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Empresa salva com sucesso!'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      } catch (e) {
+                        // Exibe mensagem de erro
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(e.toString().replaceFirst('Exception: ', '')),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+
+                  ),
 
                   // Funçao de delete com checagem de erro e confirmaçao
                   onDelete: () async {
