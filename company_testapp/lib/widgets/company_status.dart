@@ -20,6 +20,7 @@ class CompanyStatusChip extends StatefulWidget {
 class _CompanyStatusChipState extends State<CompanyStatusChip> {
   bool _isHovering = false;
 
+  // Função para exibir o diálogo de confirmação
   Future<void> _showConfirmationDialog() async {
     final bool? confirmed = await showDialog<bool>(
       context: context,
@@ -28,9 +29,13 @@ class _CompanyStatusChipState extends State<CompanyStatusChip> {
           // checagem se a empresa está ativa ou inativa
           title: Text(widget.company.active ? 'Desativar Empresa?' : 'Ativar Empresa?'),
 
+          // ________________________________________________________________________
           // Mensagem de confirmação
           content: Text(
               'Você tem certeza que deseja ${widget.company.active ? 'desativar' : 'ativar'} a empresa "${widget.company.nomeFantasia}"?'),
+
+          // ________________________________________________________________________
+          // Ações do diálogo
           actions: <Widget>[
             TextButton(
               child: const Text('Cancelar'),
@@ -48,27 +53,30 @@ class _CompanyStatusChipState extends State<CompanyStatusChip> {
               },
             ),
           ],
+
         );
       },
     );
 
     if (confirmed == true) {
       widget.onToggleStatus(widget.company.active);
-      // Optionally, if the parent doesn't rebuild this widget,
-      // you might need setState to reflect immediate visual change before parent rebuilds
-      // setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Detecçao de hover para mostrar o botão de ativar/desativar
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovering = true),
       onExit: (_) => setState(() => _isHovering = false),
-      cursor: SystemMouseCursors.click, // Indicate it's clickable
+
+      // Mudar cursos para indicar que é clicável
+      cursor: SystemMouseCursors.click,
+
+      // Exibir o chip ou o botão de hover
       child: _isHovering
-          ? _buildHoverButton() // Show "disable/enable" button on hover
-          : _buildInfoChip(),    // Show regular info chip
+          ? _buildHoverButton() // "disable/enable" button
+          : _buildInfoChip(),    // regular chip
     );
   }
 
@@ -94,13 +102,20 @@ class _CompanyStatusChipState extends State<CompanyStatusChip> {
     return InkWell(
       onTap: _showConfirmationDialog,
       borderRadius: BorderRadius.circular(20), // Match chip-like shape
+
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6), // Adjust padding
+
+        // _________________
+        // Borda e cor
         decoration: BoxDecoration(
-          color: buttonColor.withOpacity(0.15), // Softer background for hover state
+          color: buttonColor.withAlpha(10), // Softer background for hover state
           border: Border.all(color: buttonColor),
           borderRadius: BorderRadius.circular(20),
         ),
+
+        // _________________
+        // Conteúdo do botão
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
