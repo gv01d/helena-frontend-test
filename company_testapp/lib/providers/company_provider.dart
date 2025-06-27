@@ -14,12 +14,31 @@ class CompanyProvider extends ChangeNotifier {
 
   // Método para buscar todas as empresas
   Future<void> fetchCompanies() async {
+
     try {
-      print('DEBUG : <provider> Buscando empresas...');
       _companies = await _apiService.fetchCompanies();
     }
     catch (e) {
       print('Erro ao buscar empresas: $e');
+    }
+  }
+
+  Future<void> addCompany(Company company) async {
+    try {
+      await _apiService.addCompany(company);
+      await fetchCompanies(); // Recarrega a lista para refletir a adição
+    } catch (e) {
+      print('Erro ao adicionar empresa: $e');
+      rethrow; // Propaga o erro para a UI tratar (ex: mostrar SnackBar)
+    }
+  }
+
+  Future<void> deleteCompany(int id) async {
+    try {
+      await _apiService.deleteCompany(id);
+      await fetchCompanies(); // Recarrega a lista
+    } catch (e) {
+      rethrow;
     }
   }
 }

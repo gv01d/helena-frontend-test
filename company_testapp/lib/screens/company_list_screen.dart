@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/company_provider.dart';
+import '../widgets/company_item.dart';
 
 class CompanyListScreen extends StatefulWidget {
   const CompanyListScreen({super.key});
@@ -29,33 +30,45 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
         body: Consumer<CompanyProvider>(
           builder: (ctx, provider, _) {
 
+            // __________________________________________________________________
             // Cria a visualizaçao baseada no provider
             return RefreshIndicator(
-              onRefresh: () async {
-                print("DEBUG: <Refresh_ListScreen> fetching companies");
-                await provider.fetchCompanies();
-              },
+              onRefresh: () =>
+                provider.fetchCompanies(),
+
               child: ListView.builder(
                 padding: const EdgeInsets.all(8.0),
                 itemCount: provider.companies.length,
+
                 itemBuilder:
-                    (ctx, i) => ListTile(
-                      title: Text(provider.companies[i].nomeFantasia),
-                      subtitle: Text(
-                        'Funcionários: ${provider.companies[i].qtdeFuncionarios}',
-                      ),
-                      // Debug : botao de editar
-                      trailing: IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () => {
-                          print("Edit")
-                        }
-                      ),
-                      // Debug : detectar o clique
-                      onTap: () => {
-                          print("Tapped on ${provider.companies[i].nomeFantasia}")
-                        },
-                    ),
+                  (ctx, i) => CompanyItem(
+                    company: provider.companies[i],
+
+                    // Delete function with error handling and confirmation dialog
+                    onDelete: () async {
+                      try{
+                        await provider.deleteCompany(provider.companies[i].id!);
+
+                        // on success
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Empresa deletada com sucesso!'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      } catch(e){
+
+                        // on error
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(e.toString().replaceFirst('Exception: ', '')),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+
+                  ),
               ),
             );
           },
