@@ -1,6 +1,11 @@
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'models/company.dart';
 import 'services/api_service.dart';
+import 'screens/company_list_screen.dart';
+import 'providers/company_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,25 +17,28 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Helena Company App',
-      theme: ThemeData(
-        // Tema teste para o app
-        primarySwatch: Colors.indigo,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        scaffoldBackgroundColor: Colors.grey[100],
-        appBarTheme: const AppBarTheme(
-          elevation: 1,
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black87,
-          titleTextStyle: TextStyle(
-            color: Colors.black87,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+    return ChangeNotifierProvider(
+      create: (ctx) => CompanyProvider(),
+      child: MaterialApp(
+        title: 'Gerenciador de Empresas',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.indigo,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          scaffoldBackgroundColor: Colors.grey[100],
+          appBarTheme: const AppBarTheme(
+            elevation: 1,
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black87,
+            titleTextStyle: TextStyle(
+              color: Colors.black87,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
+        home: const CompanyListScreen(),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -59,8 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _incrementCounter() async {
 
     // Test fetch call
+    print("Fetching companies...");
     List<Company> companies = await ApiService().fetchCompanies();
-
 
     setState(() {
       // This call to setState tells the Flutter framework that something has

@@ -10,6 +10,7 @@ class ApiService {
   Future<List<Company>> fetchCompanies() async {
     try {
       final response = await http.get(Uri.parse('$_baseUrl/api/company'));
+      print("DEBUG : response gotten: ${response.body}");
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
