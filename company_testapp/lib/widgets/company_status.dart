@@ -74,7 +74,7 @@ class _CompanyStatusChipState extends State<CompanyStatusChip> {
       cursor: SystemMouseCursors.click,
 
       // Exibir o chip ou o botão de hover
-      child: _isHovering
+      child: _isHovering && widget.company.active
           ? _buildHoverButton() // "disable/enable" button
           : _buildInfoChip(),    // regular chip
     );

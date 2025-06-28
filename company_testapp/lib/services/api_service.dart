@@ -39,13 +39,17 @@ class ApiService {
     try {
       final response = await http.post(
         Uri.parse('$_baseUrl/api/company'),
-        headers: {'Content-Type': 'application/json'},
+        headers: _headers,
         body: json.encode(company.toJson()),
       );
 
-      if (response.statusCode != 201) {
-        throw Exception('Failed to add company. Status code: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        throw Exception('Falha ao adicionar empresa. Código: ${response.statusCode}');
       }
+    } on SocketException {
+      throw Exception('Network error. Please check your connection.');
     } catch (e) {
       throw Exception('Error adding company: $e');
     }

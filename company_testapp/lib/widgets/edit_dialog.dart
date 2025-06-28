@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 
 import '../models/company.dart';
 
-Future<void> showCustomEditDialog(BuildContext context, Company company, Function(Company company) onSave) {
+Future<void> showCustomEditDialog(BuildContext context, Company? company, Function(Company company) onSave) {
+
+  final bool isAdding = company == null;
 
   final formKey = GlobalKey<FormState>();
-  final nomeFantasiaController = TextEditingController(text: company.nomeFantasia);
-  final razaoSocialController = TextEditingController(text: company.razaoSocial);
-  final employeesController = TextEditingController(text: company.qtdeFuncionarios.toString());
+  final nomeFantasiaController = TextEditingController(text: company?.nomeFantasia ?? '');
+  final razaoSocialController = TextEditingController(text: company?.razaoSocial ?? '' );
+  final employeesController = TextEditingController(text: company?.qtdeFuncionarios.toString() ?? '');
+  final imageUrlController = TextEditingController(text: company?.avatarUrl ?? '');
+  final activeStatusNotifier = ValueNotifier<bool>(company?.active ?? true);
 
   return showGeneralDialog(
     context: context,
@@ -27,9 +31,12 @@ Future<void> showCustomEditDialog(BuildContext context, Company company, Functio
           title: const Text('Editar Empresa'),
           content: _EditFormWidget(
             formKey: formKey,
+            isAdding: isAdding,
             nomeFantasiaController: nomeFantasiaController,
             razaoSocialController: razaoSocialController,
             employeesController: employeesController,
+            imageUrlController: imageUrlController,
+            activeStatusNotifier: activeStatusNotifier,
           ),
 
           actionsAlignment: MainAxisAlignment.center,
@@ -47,12 +54,12 @@ Future<void> showCustomEditDialog(BuildContext context, Company company, Functio
               onPressed: () {
 
                 final updatedCompany = Company(
-                  id: company.id,
+                  id: company?.id ?? -1, // Se for novo, usa 0 ou o ID existente
                   nomeFantasia: nomeFantasiaController.text,
                   razaoSocial: razaoSocialController.text,
                   qtdeFuncionarios: int.parse(employeesController.text),
-                  active: company.active,
-                  avatarUrl: company.avatarUrl,
+                  avatarUrl: imageUrlController.text,
+                  active: activeStatusNotifier.value, // Pega o valor do status
                 );
                 // Chama o callback com a empresa atualizada
                 onSave(updatedCompany);
@@ -84,19 +91,52 @@ Future<void> showCustomEditDialog(BuildContext context, Company company, Functio
 }
 
 
-class _EditFormWidget extends StatelessWidget {
+class _EditFormWidget extends StatefulWidget {
   final GlobalKey<FormState> formKey;
+  final bool isAdding;
   final TextEditingController nomeFantasiaController;
   final TextEditingController razaoSocialController;
   final TextEditingController employeesController;
+  final TextEditingController imageUrlController;
+  final ValueNotifier<bool> activeStatusNotifier;
+
 
   const _EditFormWidget({
     required this.formKey,
+    required this.isAdding,
     required this.nomeFantasiaController,
     required this.razaoSocialController,
     required this.employeesController,
+    required this.imageUrlController,
+    required this.activeStatusNotifier,
+
   });
 
+  @override
+  State<_EditFormWidget> createState() => _EditFormWidgetState();
+
+}
+
+// ________________________________________________________________________
+// Widget que constrói o formulário de edição
+class _EditFormWidgetState extends State<_EditFormWidget> {
+
+  // Listener para atualizar a UI quando a URL da imagem mudar
+  void _updateImagePreview() {
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.imageUrlController.addListener(_updateImagePreview);
+  }
+
+  @override
+  void dispose() {
+    widget.imageUrlController.removeListener(_updateImagePreview);
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -106,9 +146,63 @@ class _EditFormWidget extends StatelessWidget {
         children: [
 
           // ________________________________________________________________________
+          // Pré-visualização da imagem
+          CircleAvatar(
+            radius: 40,
+            backgroundColor: Color.fromARGB(255, 34, 181, 153),
+            backgroundImage: NetworkImage(widget.imageUrlController.text),
+            onBackgroundImageError: (_, __) {},
+            child: widget.imageUrlController.text.isEmpty
+                ? const Icon(Icons.business, size: 40, color: const Color.fromARGB(255, 66, 66, 66))
+                : null,
+          ),
+          const SizedBox(height: 16),
+
+          // Mostra o campo de URL da imagem e o switch de status apenas se estiver adicionando
+          if (widget.isAdding) ...[
+            // __________________
+            TextFormField(
+              controller: widget.imageUrlController,
+              decoration: const InputDecoration(
+                labelText: 'URL da Imagem',
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // ____________________
+            // Usa um ValueListenableBuilder para reconstruir apenas o Switch quando seu valor mudar
+            ValueListenableBuilder<bool>(
+              valueListenable: widget.activeStatusNotifier,
+              builder: (context, isActive, child) {
+                return SwitchListTile(
+                  activeColor: const Color.fromARGB(255, 34, 181, 153),
+                  title: Text('Status : ${isActive?'Ativo' : 'Inativo'}'),
+                  value: isActive,
+                  onChanged: (newValue) {
+                    widget.activeStatusNotifier.value = newValue;
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+          ] else ...[
+            // No modo de edição, mostra o status como um Chip não editável
+            Chip(
+              label: Text(
+                widget.activeStatusNotifier.value ? 'Ativo' : 'Inativo',
+                style: const TextStyle(color: Colors.white),
+              ),
+              backgroundColor: widget.activeStatusNotifier.value ? const Color.fromARGB(255, 34, 181, 153) : Colors.grey,
+            ),
+            const SizedBox(height: 16),
+          ],
+
+          // ________________________________________________________________________
           // Nome
           TextFormField(
-            controller: nomeFantasiaController,
+            controller: widget.nomeFantasiaController,
             decoration: const InputDecoration(
               labelText: 'Nome Fantasia',
               border: OutlineInputBorder(),
@@ -125,7 +219,7 @@ class _EditFormWidget extends StatelessWidget {
           // Razão Social
           const SizedBox(height: 16),
           TextFormField(
-            controller: razaoSocialController,
+            controller: widget.razaoSocialController,
             decoration: const InputDecoration(
               labelText: 'Razão Social',
               border: OutlineInputBorder(),
@@ -142,7 +236,7 @@ class _EditFormWidget extends StatelessWidget {
           // Quantidade de Funcionários
           const SizedBox(height: 16),
           TextFormField(
-            controller: employeesController,
+            controller: widget.employeesController,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
               labelText: 'Nº de Funcionários',
