@@ -2,8 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'models/company.dart';
-import 'services/api_service.dart';
 import 'screens/company_list_screen.dart';
 import 'providers/company_provider.dart';
 
@@ -33,10 +31,10 @@ class MyApp extends StatelessWidget {
 
           appBarTheme: const AppBarTheme(
             elevation: 1,
-            backgroundColor: const Color.fromARGB(255, 32, 46, 55),
+            backgroundColor: Color.fromARGB(255, 32, 46, 55),
             foregroundColor: Colors.black87,
-            titleTextStyle: const TextStyle(
-              color: const Color.fromARGB(255,34, 151, 153),
+            titleTextStyle: TextStyle(
+              color: Color.fromARGB(255,34, 151, 153),
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),

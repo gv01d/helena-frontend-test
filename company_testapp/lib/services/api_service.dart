@@ -64,7 +64,6 @@ class ApiService {
   /// Recebe um objeto Company e faz uma requisição PUT.
   Future<void> updateCompany(Company company) async {
     try {
-      print(company.avatarUrl);
       
       final response = await http.put(
         Uri.parse('$_baseUrl/api/company/${company.id}'),

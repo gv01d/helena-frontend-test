@@ -174,7 +174,7 @@ class _EditFormWidgetState extends State<_EditFormWidget> {
             backgroundImage: NetworkImage(widget.imageUrlController.text),
             onBackgroundImageError: (_, __) {},
             child: widget.imageUrlController.text.isEmpty
-                ? const Icon(Icons.business, size: 40, color: const Color.fromARGB(255, 66, 66, 66))
+                ? const Icon(Icons.business, size: 40, color: Color.fromARGB(255, 66, 66, 66))
                 : null,
           ),
           const SizedBox(height: 16),

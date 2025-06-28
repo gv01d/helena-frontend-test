@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../models/company.dart';
@@ -13,10 +12,10 @@ class CompanyStatusChip extends StatefulWidget {
   /// Company: A empresa cujo status será exibido
   /// onToggleStatus: Função callback que será chamada ao ativar/desativar a empresa
   const CompanyStatusChip({
-    Key? key,
+    super.key,
     required this.company,
     required this.onToggleStatus,
-  }) : super(key: key);
+  });
 
   @override
   _CompanyStatusChipState createState() => _CompanyStatusChipState();
@@ -50,13 +49,13 @@ class _CompanyStatusChipState extends State<CompanyStatusChip> {
               },
             ),
             TextButton(
-              child: Text(widget.company.active ? 'Desativar' : 'Ativar'),
               style: TextButton.styleFrom(
                 foregroundColor: widget.company.active ? Colors.red : Colors.green,
               ),
               onPressed: () {
                 Navigator.of(dialogContext).pop(true); // User confirmed
               },
+              child: Text(widget.company.active ? 'Desativar' : 'Ativar'),
             ),
           ],
 

@@ -3,7 +3,7 @@ import '../models/company.dart';
 import '../services/api_service.dart';
 
 // Possiveis estados da tela
-enum ViewState { Idle, Loading, Error }
+enum ViewState { idle, loading, error }
 
 class CompanyProvider extends ChangeNotifier {
   // service para interagir com a API
@@ -12,7 +12,7 @@ class CompanyProvider extends ChangeNotifier {
   // Lista de empresas
   List<Company> _companies = [];
   // Estado da tela
-  ViewState _state = ViewState.Idle;
+  ViewState _state = ViewState.idle;
   // Mensagem de erro
   String _errorMessage = '';
 
@@ -27,14 +27,14 @@ class CompanyProvider extends ChangeNotifier {
   /// Busca as empresas da API e atualiza o estado
   Future<void> fetchCompanies() async {
     // Define o estado como carregando
-    _state = ViewState.Loading;
+    _state = ViewState.loading;
     notifyListeners();
 
     try {
       _companies = await _apiService.fetchCompanies();
 
       // Retorna o estado para Idle
-      _state = ViewState.Idle;
+      _state = ViewState.idle;
 
       // Ordena a lista para mostrar os ativos primeiro
       _companies.sort((a, b) {
@@ -45,7 +45,7 @@ class CompanyProvider extends ChangeNotifier {
     }
     catch (e) {
       _errorMessage = e.toString().replaceFirst('Exception: ', '');
-      _state = ViewState.Error;
+      _state = ViewState.error;
     } finally {
       notifyListeners();
     }
@@ -59,7 +59,6 @@ class CompanyProvider extends ChangeNotifier {
       await _apiService.addCompany(company);
       await fetchCompanies(); // Recarrega a lista para refletir a adição
     } catch (e) {
-      print('Erro ao adicionar empresa: $e');
       rethrow; // Propaga o erro para a UI tratar (ex: mostrar SnackBar)
     }
   }

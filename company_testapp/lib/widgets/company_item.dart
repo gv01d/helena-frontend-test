@@ -1,5 +1,4 @@
 import 'package:company_testapp/widgets/company_status.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../models/company.dart';
@@ -70,8 +69,9 @@ class CompanyItem extends StatelessWidget{
             CompanyStatusChip(
               company: company,
               onToggleStatus: (bool oldStatus) {
-                if(oldStatus)
+                if(oldStatus) {
                   onDelete();
+                }
               }
             ),
 

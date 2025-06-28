@@ -14,4 +14,13 @@ company_testapp/
 │   │   ├── company_provider.dart
 │   ├── services/ // Service layer for API calls
 │   │   ├── api_service.dart
+│   ├── widgets/ // widgets for UI components
+│   │   ├── company_item.dart
+│   │   ├── company_status.dart
+│   │   ├── edit_dialog.dart
+│   │   ├── error.dart
 ├── pubspec.yaml
+
+## Observações
+- O projeto foi rodado o argumento `--web-browser-flag "--disable-web-security"` para evitar problemas de CORS.
+- O projeto utiliza o `provider` para gerenciamento de estado.

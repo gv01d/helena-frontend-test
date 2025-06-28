@@ -83,7 +83,7 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
     // Usa o provider para buscar os dados
     await Provider.of<CompanyProvider>(context, listen: false).fetchCompanies();
     // Se a busca for bem-sucedida, inicia o delay de 30 segundos
-    if (mounted && Provider.of<CompanyProvider>(context, listen: false).state == ViewState.Idle) {
+    if (mounted && Provider.of<CompanyProvider>(context, listen: false).state == ViewState.idle) {
       _startInitialDelay();
     }
   }
@@ -153,7 +153,7 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
             padding: const EdgeInsets.only(right: 30.0),
             child:
             IconButton(
-              icon: const Icon(Icons.add, color:  const Color.fromARGB(255,34, 151, 153), size: 50),
+              icon: const Icon(Icons.add, color: Color.fromARGB(255,34, 151, 153), size: 50),
 
               tooltip: 'Adicionar Empresa',
               onPressed: () => showCustomEditDialog(
@@ -200,13 +200,13 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
 
                 // __________________________________________________________________
                 // Status de Carregando
-                if(provider.state == ViewState.Loading) {
+                if(provider.state == ViewState.loading) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
                 // __________________________________________________________________
                 // Status de Erro
-                if(provider.state == ViewState.Error) {
+                if(provider.state == ViewState.error) {
                   return Error(
                       iconData: CupertinoIcons.exclamationmark_triangle,
                       message: provider.errorMessage,
