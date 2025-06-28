@@ -3,10 +3,15 @@ import 'package:flutter/material.dart';
 
 import '../models/company.dart';
 
+/// Widget para exibir o status de uma empresa com opção de ativar/desativar
 class CompanyStatusChip extends StatefulWidget {
   final Company company;
   final Function(bool ativoOuDesativo) onToggleStatus; // Callback to actually change status
 
+  /// Construtor do widget CompanyStatusChip
+  /// key: Chave opcional para o widget
+  /// Company: A empresa cujo status será exibido
+  /// onToggleStatus: Função callback que será chamada ao ativar/desativar a empresa
   const CompanyStatusChip({
     Key? key,
     required this.company,
@@ -26,6 +31,7 @@ class _CompanyStatusChipState extends State<CompanyStatusChip> {
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
+
           // checagem se a empresa está ativa ou inativa
           title: Text(widget.company.active ? 'Desativar Empresa?' : 'Ativar Empresa?'),
 

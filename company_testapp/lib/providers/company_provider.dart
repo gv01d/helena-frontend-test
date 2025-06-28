@@ -23,7 +23,8 @@ class CompanyProvider extends ChangeNotifier {
   String get errorMessage => _errorMessage;
 
   // _______________________________________________________
-  // metodo para buscar todas as empresas
+  /// metodo para buscar todas as empresas
+  /// Busca as empresas da API e atualiza o estado
   Future<void> fetchCompanies() async {
     // Define o estado como carregando
     _state = ViewState.Loading;
@@ -51,7 +52,8 @@ class CompanyProvider extends ChangeNotifier {
   }
 
   // ________________________________________________________
-  // metodo para adicionar uma empresa
+  /// Método para adicionar uma empresa
+  /// Adiciona uma nova empresa e recarrega a lista
   Future<void> addCompany(Company company) async {
     try {
       await _apiService.addCompany(company);
@@ -63,7 +65,8 @@ class CompanyProvider extends ChangeNotifier {
   }
 
   // _________________________________________________________
-  // metodo para deletar uma empresa
+  /// Método para deletar uma empresa
+  /// Deleta uma empresa pelo ID e recarrega a lista
   Future<void> deleteCompany(int id) async {
     try {
       await _apiService.deleteCompany(id);
@@ -73,6 +76,9 @@ class CompanyProvider extends ChangeNotifier {
     }
   }
 
+  // __________________________________________________________
+  /// Método para atualizar uma empresa
+  /// Atualiza uma empresa existente e recarrega a lista
   Future<void> updateCompany(Company company) async {
     try {
       await _apiService.updateCompany(company);

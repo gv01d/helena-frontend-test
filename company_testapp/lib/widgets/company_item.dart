@@ -20,35 +20,6 @@ class CompanyItem extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    // Função para exibir o diálogo de confirmação
-    Future<void> _showConfirmationDialog() async {
-      final bool? confirmed = await showDialog<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          backgroundColor: Color.fromARGB(255,200, 210, 210),
-          title: const Text('Confirmar Exclusão'),
-          content: const Text('Deseja realmente deletar esta empresa?'),
-          actions: [
-            TextButton(
-              style: TextButton.styleFrom(foregroundColor: Colors.red),
-              child: const Text('Confirmar'),
-              onPressed: () => Navigator.of(ctx).pop(true),
-            ),
-            TextButton(
-              style: TextButton.styleFrom(foregroundColor: Color.fromARGB(255, 66, 66, 66)),
-              child: const Text('Cancelar'),
-              onPressed: () => Navigator.of(ctx).pop(false),
-            ),
-          ],
-        ),
-      );
-
-      // Se o usuário confirmou, chama a função onDelete
-      if (confirmed == true) {
-        onDelete();
-      }
-    }
-
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6),
       elevation: 2,

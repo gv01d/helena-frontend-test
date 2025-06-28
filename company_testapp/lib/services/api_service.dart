@@ -15,7 +15,8 @@ class ApiService {
   // _________________________________________________________
   // Metodo para buscar todas as empresas
 
-  /// Fetches a list of companies from the API.
+  /// Usa de um fetch para buscar todas as empresas na API.
+  /// Retorna uma lista de objetos Company.
   Future<List<Company>> fetchCompanies() async {
     try {
       final response = await http.get(Uri.parse('$_baseUrl/api/company'));
@@ -34,7 +35,8 @@ class ApiService {
   // _________________________________________________________
   // Metodo para adicionar uma empresa
 
-  /// Adds a new company to the API.
+  /// adiciona uma nova empresa na API.
+  /// Recebe um objeto Company e faz uma requisição POST.
   Future<void> addCompany(Company company) async {
     try {
       final response = await http.post(
@@ -58,7 +60,8 @@ class ApiService {
   // _________________________________________________________
   // Metodo para atualizar uma empresa
 
-  /// Updates an existing company in the API.
+  /// Atualiza uma empresa existente na API.
+  /// Recebe um objeto Company e faz uma requisição PUT.
   Future<void> updateCompany(Company company) async {
     try {
       print(company.avatarUrl);
@@ -82,7 +85,8 @@ class ApiService {
   // _________________________________________________________
   // metodo para "deletar" uma empresa (desativar)
 
-  /// Deletes (deactivates) a company by its ID in the API.
+  /// Deleta (desativa) uma empresa na API.
+  /// Recebe o ID da empresa e faz uma requisição DELETE.
   Future<void> deleteCompany(int id) async {
     try {
       final response = await http.delete(

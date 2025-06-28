@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+/// Widget para exibir uma mensagem de erro com um ícone, texto e botão de ação.
 class Error extends StatelessWidget{
   final String message;
   final VoidCallback onRetry;

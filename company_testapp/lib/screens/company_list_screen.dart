@@ -96,6 +96,8 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Row(
           children: [
+
+            // Icone e timer de atualização
             if (_showRefreshBar && _autoRefreshEnabled) ...[
               const Icon(Icons.timer_outlined, size: 20, color: Colors.blue),
               const SizedBox(width: 8),
@@ -119,7 +121,7 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
             ),
              */
 
-            //
+            // Botão para atualizar os dados manualmente
             ElevatedButton.icon(
               onPressed: _fetchDataAndResetTimers,
               icon: const Icon(Icons.refresh, size: 18, color: Colors.white,),
@@ -185,11 +187,13 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
         ],
       ),
 
-
       body: Column(
           children: [
-          // A barra de atualização só é mostrada quando as condições são verdadeiras
-          _buildRefreshBar(),
+            // Barra de atualizaçao
+            _buildRefreshBar(),
+
+            // __________________________________________________________________
+            // Lista de empresas
             Expanded( child:
             Consumer<CompanyProvider>(
               builder: (ctx, provider, _) {
@@ -212,7 +216,6 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
 
                 // __________________________________________________________________
                 // Se nao houver empresas
-                //
                 if(provider.companies.isEmpty) {
                   return Error(
                     iconData: CupertinoIcons.xmark_circle,
@@ -229,13 +232,18 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
                     provider.fetchCompanies(),
 
                   child:
-                    ListView.builder(
+                  ListView.builder(
                     padding: const EdgeInsets.all(8.0),
                     itemCount: provider.companies.length,
 
+                    // __________________________________________________________________
+                    // Cria os itens da lista de empresas
                     itemBuilder:
                       (ctx, i) => CompanyItem(
                         company: provider.companies[i],
+
+                        // _________________________________________________________________
+                        // Funçao de editar empresa com checagem de erro
                         onTap: () => showCustomEditDialog(
                           context,
                           provider.companies[i],
@@ -269,6 +277,7 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
 
                         ),
 
+                        // _________________________________________________________________
                         // Funçao de delete com checagem de erro e confirmaçao
                         onDelete: () async {
                           try{

@@ -27,8 +27,12 @@ Future<void> showCustomEditDialog(BuildContext context, Company? company, Functi
     pageBuilder: (ctx, a1, a2) {
       return Center(
 
+        // Centraliza o diálogo na tela
         child: AlertDialog(
           title: const Text('Editar Empresa'),
+
+          // ________________________________________________________________________
+          // Formulário de edição
           content: _EditFormWidget(
             formKey: formKey,
             isAdding: isAdding,
@@ -40,12 +44,20 @@ Future<void> showCustomEditDialog(BuildContext context, Company? company, Functi
           ),
 
           actionsAlignment: MainAxisAlignment.center,
+
+          // ________________________________________________________________________
+          // Ações do diálogo
           actions: [
+
+            // ________________________________________________________________________
+            // Botao de Cancelar
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
               child: const Text('CANCELAR'),
             ),
 
+            // ________________________________________________________________________
+            // Botão de Salvar
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 34, 181, 153), // Cor do botão
@@ -53,17 +65,20 @@ Future<void> showCustomEditDialog(BuildContext context, Company? company, Functi
               ),
               onPressed: () {
 
+                // Valida o formulário
                 final updatedCompany = Company(
-                  id: company?.id ?? -1, // Se for novo, usa 0 ou o ID existente
+                  id: company?.id ?? -1, // Se for novo, usa -1 ou o ID existente
                   nomeFantasia: nomeFantasiaController.text,
                   razaoSocial: razaoSocialController.text,
                   qtdeFuncionarios: int.parse(employeesController.text),
                   avatarUrl: imageUrlController.text,
-                  active: activeStatusNotifier.value, // Pega o valor do status
+                  active: activeStatusNotifier.value,
                 );
+
                 // Chama o callback com a empresa atualizada
                 onSave(updatedCompany);
 
+                // Fecha o diálogo
                 Navigator.of(ctx).pop();
               },
               child: const Text('SALVAR'),
@@ -74,6 +89,7 @@ Future<void> showCustomEditDialog(BuildContext context, Company? company, Functi
       );
     },
 
+    // _______________________________________________________________________
     // Animação de transição personalizada
     transitionBuilder: (ctx, a1, a2, child) {
 
@@ -90,7 +106,12 @@ Future<void> showCustomEditDialog(BuildContext context, Company? company, Functi
   );
 }
 
+// ________________________________________________________________________
+// Widget que contém o formulário de edição
 
+/// Um widget de formulário para editar ou adicionar uma empresa.
+/// Este widget é usado dentro de um diálogo e permite que o usuário insira
+/// os detalhes da empresa
 class _EditFormWidget extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final bool isAdding;
